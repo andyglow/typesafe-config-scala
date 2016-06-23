@@ -3,7 +3,6 @@ package com.github.andyglow.config
 import com.typesafe.config._
 import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.OptionValues._
-import com.github.andyglow.config._
 
 import scala.collection.JavaConverters._
 import scala.concurrent.duration._
