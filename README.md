@@ -22,7 +22,7 @@ val intOptProp: Option[Int] = config.opt[Int]("some.config.int-key")
 
 // default values
 val stringProp: String = config.getOrElse("some.config.string-key", "default")
-val intProp: Int = config.opt[Int]("some.config.int-key", 76)
+val intProp: Int = config.getOrElse("some.config.int-key", 76)
 ```
 
 ### Supported types
