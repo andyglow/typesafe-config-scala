@@ -6,11 +6,13 @@ Little scala extension to Typesafe Config
 ## Usage
 
 Import it
-`import com.github.andyglow.config._`
+```scala
+import com.github.andyglow.config._
+```
 
 And then you will be able to
 
-```
+```scala
 val config: Config = ...
 
 // optional value
