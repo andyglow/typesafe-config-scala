@@ -1,5 +1,6 @@
 # Typesafe Config (little scala wrapper)
 [![Build Status](https://travis-ci.org/andyglow/typesafe-config-scala.svg)](https://travis-ci.org/andyglow/typesafe-config-scala)
+[![Download](https://api.bintray.com/packages/andyglow/scala-tools/typesafe-config-scala/images/download.svg) ](https://bintray.com/andyglow/scala-tools/typesafe-config-scala/_latestVersion)
 
 Little scala extension to Typesafe Config
 
