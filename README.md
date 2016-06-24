@@ -6,6 +6,12 @@ Little scala extension to Typesafe Config
 
 ## Usage
 
+### build.sbt
+```
+libraryDependencies += "com.github.andyglow" %% "typesafe-config-scala" % ${LATEST_VERSION} % Compile
+```
+
+### Code
 Import it
 ```scala
 import com.github.andyglow.config._
