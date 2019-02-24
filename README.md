@@ -54,6 +54,7 @@ val iterator3 = config.get[Iterator[ConfigMemorySize]]("path")
 - `Config`
 - `ConfigObject`
 - `ConfigMemorySize`
+- `java.util.Date` (to demonstrate how it might be extended)
 - `Option[T]` where `T` is one of the supported types
 - scala collections. `Seq[T]`, etc. Any sort of collection types which has corresponsing `CanBuildFrom`
 
