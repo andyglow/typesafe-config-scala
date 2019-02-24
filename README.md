@@ -1,6 +1,6 @@
 # Typesafe Config (little scala wrapper)
 [![Build Status](https://travis-ci.org/andyglow/typesafe-config-scala.svg)](https://travis-ci.org/andyglow/typesafe-config-scala)
-[![Download](https://api.bintray.com/packages/andyglow/scala-tools/typesafe-config-scala/images/download.svg) ](https://bintray.com/andyglow/scala-tools/typesafe-config-scala/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.andyglow/typesafe-config-scala_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.andyglow/typesafe-config-scala_2.12)
 
 Little scala extension to Typesafe Config
 
