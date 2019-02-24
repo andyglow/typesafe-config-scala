@@ -1,36 +1,49 @@
 package com.github.andyglow
 
 import com.typesafe.config._
-import scala.concurrent.duration.{FiniteDuration, Duration}
+
 
 package object config {
 
-  type Getter[T] = (Config, String) => T
+  implicit class ConfigValueOps(private val x: ConfigValue) extends AnyVal {
 
-  case class Bytes(value: Long)
+    def isBool: Boolean = x.valueType() == ConfigValueType.BOOLEAN
 
-  implicit val stringGetter: Getter[String]               = _ getString _
-  implicit val booleanGetter: Getter[Boolean]             = _ getBoolean _
-  implicit val intGetter: Getter[Int]                     = _ getInt _
-  implicit val doubleGetter: Getter[Double]               = _ getDouble _
-  implicit val longGetter: Getter[Long]                   = _ getLong _
-  implicit val bytesGetter: Getter[Bytes]                 = (c, p) => Bytes(c getBytes p)
-  implicit val durationGetter: Getter[Duration]           = (c, p) => Duration.fromNanos((c getDuration p).toNanos)
-  implicit val finiteDurationGetter: Getter[FiniteDuration] = (c, p) => Duration.fromNanos((c getDuration p).toNanos)
-  implicit val configListGetter: Getter[ConfigList]       = _ getList _
-  implicit val configGetter: Getter[Config]               = _ getConfig _
-  implicit val objectGetter: Getter[ConfigObject]         = _ getObject _
-  implicit val memorySizeGetter: Getter[ConfigMemorySize] = _ getMemorySize _
+    def isNum: Boolean = x.valueType() == ConfigValueType.NUMBER
 
-  implicit class ConfigOps(val config: Config) extends AnyVal {
-    def getOrElse[T : Getter](path: String, defValue: => T): T = opt[T](path) getOrElse defValue
-    def opt[T : Getter](path: String): Option[T] = {
-      if (config hasPathOrNull path) {
-        val getter = implicitly[Getter[T]]
-        Some(getter(config, path))
-      } else
-        None
-    }
+    def isStr: Boolean = x.valueType() == ConfigValueType.STRING
+
+    def isObj: Boolean = x.valueType() == ConfigValueType.OBJECT
+
+    def isList: Boolean = x.valueType() == ConfigValueType.LIST
   }
 
+  object ConfBool {
+    def unapply(x: ConfigValue): Option[Boolean] = if (x.isBool) Some(x.unwrapped().asInstanceOf[Boolean]) else None
+  }
+
+  object ConfStr {
+    def unapply(x: ConfigValue): Option[String] = if (x.isStr) Some(x.unwrapped().asInstanceOf[String]) else None
+  }
+
+  object ConfNum {
+    def unapply(x: ConfigValue): Option[Number] = if (x.isNum) Some(x.unwrapped().asInstanceOf[Number]) else None
+  }
+
+  object ConfObj {
+    def unapply(x: ConfigValue): Option[ConfigObject] = if (x.isObj) Some(x.asInstanceOf[ConfigObject]) else None
+  }
+
+  object ConfList {
+    def unapply(x: ConfigValue): Option[ConfigList] = if (x.isList) Some(x.asInstanceOf[ConfigList]) else None
+  }
+
+  implicit class ConfigOps(val config: Config) extends AnyVal {
+
+    def get[T: FromConf](path: String): T = FromConf[T](config, path)
+
+    def getOrElse[T: FromConf](path: String, defValue: => T): T = opt[T](path) getOrElse defValue
+
+    def opt[T: FromConf](path: String): Option[T] = FromConf[Option[T]](config, path)
+  }
 }
