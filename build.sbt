@@ -1,4 +1,5 @@
 import xerial.sbt.Sonatype._
+import ReleaseTransformations._
 
 name := "typesafe-config-scala"
 
@@ -62,3 +63,20 @@ releaseCrossBuild := true
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.3",
   "org.scalatest" %% "scalatest" % "3.0.1" % Test)
+
+releaseCrossBuild := true
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  releaseStepCommandAndRemaining("+publishSigned"),
+  setNextVersion,
+  commitNextVersion,
+  releaseStepCommand("sonatypeReleaseAll"),
+  pushChanges
+)
