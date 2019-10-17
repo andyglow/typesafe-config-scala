@@ -13,21 +13,37 @@ organizationName := "andyglow"
 
 publishTo := sonatypePublishTo.value
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.13.1"
 
-crossScalaVersions := Seq("2.12.8", "2.11.12")
+crossScalaVersions := Seq("2.13.1", "2.12.10", "2.11.12")
 
-scalacOptions ++= Seq(
-  "-encoding", "UTF-8",
-  "-feature",
-  "-unchecked",
-  "-deprecation",
-  //  "-Xfatal-warnings",
-  "-Xlint",
-  "-Yno-adapted-args",
-  "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen",
-  "-Xfuture")
+scalacOptions ++= {
+  val options = Seq(
+    "-encoding", "UTF-8",
+    "-feature",
+    "-unchecked",
+    "-deprecation",
+    "-Xfatal-warnings",
+    "-Xlint",
+    "-Yno-adapted-args",
+    "-Ywarn-dead-code",
+    "-Ywarn-numeric-widen",
+    "-Xfuture",
+    "-language:higherKinds")
+
+  // WORKAROUND https://github.com/scala/scala/pull/5402
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, 12)) => options.map {
+      case "-Xlint"               => "-Xlint:-unused,_"
+      case "-Ywarn-unused-import" => "-Ywarn-unused:imports,-patvars,-privates,-locals,-params,-implicits"
+      case other                  => other
+    }
+    case Some((2, n)) if n >= 13  => options.filterNot { opt =>
+      opt == "-Yno-adapted-args" || opt == "-Xfuture" || opt == "-Xfatal-warnings" || opt == "-deprecation"
+    } :+ "-Xsource:2.13"
+    case _             => options
+  }
+}
 
 scalacOptions in (Compile, doc) ++= Seq(
   "-groups",
@@ -61,8 +77,8 @@ developers := List(
 releaseCrossBuild := true
 
 libraryDependencies ++= Seq(
-  "com.typesafe" % "config" % "1.3.3",
-  "org.scalatest" %% "scalatest" % "3.0.1" % Test)
+  "com.typesafe" % "config" % "1.3.4",
+  "org.scalatest" %% "scalatest" % "3.0.8" % Test)
 
 releaseCrossBuild := true
 
