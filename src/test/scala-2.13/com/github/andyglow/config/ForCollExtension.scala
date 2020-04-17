@@ -3,10 +3,11 @@ package com.github.andyglow.config
 import com.github.andyglow.config.ConfigExtSpec.config
 import com.github.andyglow.config.FromConf.Empty
 import org.scalatest._
-import org.scalatest.Matchers._
+import matchers.should.Matchers._
 
 import scala.collection.BuildFrom
 import scala.reflect.ClassTag
+import org.scalatest.matchers
 
 trait ForCollExtension { this: WordSpec =>
 

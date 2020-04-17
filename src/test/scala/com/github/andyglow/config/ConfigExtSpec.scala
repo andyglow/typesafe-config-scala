@@ -4,13 +4,14 @@ import java.time.{Period, Duration => JDuration}
 
 import com.typesafe.config._
 import org.scalatest.OptionValues._
-import org.scalatest.{Matchers, WordSpec}
 
 import scala.collection.immutable.Queue
 import scala.concurrent.duration._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
 
-class ConfigExtSpec extends WordSpec with Matchers with ForCollExtension with AsScalaExtension {
+class ConfigExtSpec extends AnyWordSpec with Matchers with ForCollExtension with AsScalaExtension {
 
   import ConfigExtSpec._
 
