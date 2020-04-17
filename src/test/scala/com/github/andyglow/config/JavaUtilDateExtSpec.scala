@@ -5,10 +5,12 @@ import java.util.{Date, GregorianCalendar}
 
 import com.typesafe.config.{Config, ConfigException, ConfigFactory}
 import org.scalatest._
-import org.scalatest.Matchers._
+import matchers.should.Matchers._
+import org.scalatest.matchers
+import org.scalatest.funsuite.AnyFunSuite
 
 
-class JavaUtilDateExtSpec extends FunSuite {
+class JavaUtilDateExtSpec extends AnyFunSuite {
   import JavaUtilDateExtSpec._
 
   test("Parse out java.util.Date with fmt1") {
