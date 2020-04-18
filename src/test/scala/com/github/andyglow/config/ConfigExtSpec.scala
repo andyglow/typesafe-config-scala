@@ -29,7 +29,6 @@ class ConfigExtSpec extends AnyWordSpec with Matchers with ForCollExtension with
     "handle collection of period" when multiValScope[Period]("period-list", Period.ofWeeks(2), Period.ofMonths(4))
     "handle collection of memory size" when multiValScope[ConfigMemorySize]("memorySize-list", ConfigMemorySize.ofBytes(2048), ConfigMemorySize.ofBytes(1024))
 
-
     "handle strings" when singleValScope[String]("string", "foo", "orElse")
     "handle booleans" when singleValScope[Boolean]("boolean", true, false)
     "handle ints" when singleValScope[Int]("int", 5, 11)
@@ -45,22 +44,22 @@ class ConfigExtSpec extends AnyWordSpec with Matchers with ForCollExtension with
       ConfigMemorySize.ofBytes(1024))
 
     "handle config lists" in {
-      config.opt[ConfigList]("configList") shouldBe Symbol("defined")
-      config.opt[ConfigList]("configList").value.unwrapped().asScala shouldBe List(15, "bar")
-      config.opt[ConfigList]("absent") shouldBe None
+      config.get[Option[ConfigList]]("configList") shouldBe Symbol("defined")
+      config.get[Option[ConfigList]]("configList").value.unwrapped().asScala shouldBe List(15, "bar")
+      config.get[Option[ConfigList]]("absent") shouldBe None
     }
 
     "handle configs" in {
-      config.opt[Config]("config") shouldBe Symbol("defined")
-      config.opt[Config]("config").value.hasPath("bar") shouldBe true
-      config.opt[Config]("config").value.getString("bar") shouldBe "baz"
-      config.opt[Config]("absent") shouldBe None
+      config.get[Option[Config]]("config") shouldBe Symbol("defined")
+      config.get[Option[Config]]("config").value.hasPath("bar") shouldBe true
+      config.get[Option[Config]]("config").value.getString("bar") shouldBe "baz"
+      config.get[Option[Config]]("absent") shouldBe None
     }
 
     "handle config objects" in {
-      config.opt[ConfigObject]("configObject") shouldBe Symbol("defined")
-      config.opt[ConfigObject]("configObject").value.unwrapped().asScala shouldBe Map("x" -> 99)
-      config.opt[ConfigObject]("absent") shouldBe None
+      config.get[Option[ConfigObject]]("configObject") shouldBe Symbol("defined")
+      config.get[Option[ConfigObject]]("configObject").value.unwrapped().asScala shouldBe Map("x" -> 99)
+      config.get[Option[ConfigObject]]("absent") shouldBe None
     }
   }
 
@@ -77,8 +76,8 @@ class ConfigExtSpec extends AnyWordSpec with Matchers with ForCollExtension with
     }
 
     "opt" in {
-      config.opt[T](path) shouldBe Some(expect)
-      config.opt[T]("absent") shouldBe None
+      config.get[Option[T]](path) shouldBe Some(expect)
+      config.get[Option[T]]("absent") shouldBe None
     }
 
     "getOrElse" in {
@@ -93,7 +92,6 @@ class ConfigExtSpec extends AnyWordSpec with Matchers with ForCollExtension with
 
     forColl[Iterable, T](path, _.toList, expect: _*)
     forColl[Iterator, T](path, _.toList, expect: _*)
-    forColl[Stream, T](path, _.toList, expect: _*)
     forColl[Queue, T](path, _.toList, expect: _*)
     forColl[Seq, T](path, _.toList, expect: _*)
     forColl[IndexedSeq, T](path, _.toList, expect: _*)

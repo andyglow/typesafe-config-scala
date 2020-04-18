@@ -7,7 +7,7 @@ import com.typesafe.config._
 
 import scala.collection.generic.CanBuildFrom
 import scala.concurrent.duration.{Duration, FiniteDuration}
-import scala.language.{higherKinds, implicitConversions}
+import scala.language.higherKinds
 
 
 trait FromConf[T] extends ((Config, String) => T)

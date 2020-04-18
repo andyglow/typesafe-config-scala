@@ -59,10 +59,6 @@ object FromConf {
     implicit val emptyIndexedSeq: Empty[IndexedSeq] = mk(IndexedSeq.empty)
     implicit val emptyVector: Empty[Vector] = mk(Vector.empty)
     implicit val emptySet: Empty[Set] = mk(Set.empty)
-    // deprecated
-//    implicit val emptyTraversableOnce: Empty[TraversableOnce] = mk(Nil)
-//    implicit val emptyTraversable: Empty[Traversable] = mk(Nil)
-    implicit val emptyStream: Empty[Stream] = mk(Stream.empty)
   }
 
   implicit def traversableFC[C[_], T](implicit

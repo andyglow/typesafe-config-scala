@@ -42,8 +42,6 @@ package object config {
 
     def get[T: FromConf](path: String): T = FromConf[T](config, path)
 
-    def getOrElse[T: FromConf](path: String, defValue: => T): T = opt[T](path) getOrElse defValue
-
-    def opt[T: FromConf](path: String): Option[T] = FromConf[Option[T]](config, path)
+    def getOrElse[T: FromConf](path: String, defValue: => T): T = get[Option[T]](path) getOrElse defValue
   }
 }

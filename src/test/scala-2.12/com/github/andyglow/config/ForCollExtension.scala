@@ -1,15 +1,16 @@
 package com.github.andyglow.config
 
 import com.github.andyglow.config.ConfigExtSpec.config
-import org.scalatest.WordSpec
-import org.scalatest.Matchers._
+import org.scalatest._
+import wordspec._
+import matchers.should.Matchers._
 
 import scala.collection.generic.CanBuildFrom
 import scala.language.higherKinds
 import scala.reflect.ClassTag
 
 
-trait ForCollExtension { this: WordSpec =>
+trait ForCollExtension { this: AnyWordSpec =>
 
   def forColl[C[_] <: TraversableOnce[_], T: ConfType](
     path: String,

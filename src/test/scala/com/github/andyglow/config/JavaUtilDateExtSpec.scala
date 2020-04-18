@@ -6,7 +6,6 @@ import java.util.{Date, GregorianCalendar}
 import com.typesafe.config.{Config, ConfigException, ConfigFactory}
 import org.scalatest._
 import matchers.should.Matchers._
-import org.scalatest.matchers
 import org.scalatest.funsuite.AnyFunSuite
 
 

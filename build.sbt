@@ -27,6 +27,7 @@ scalacOptions ++= {
     "-Xlint",
     "-Yno-adapted-args",
     "-Ywarn-dead-code",
+    "-Ywarn-unused-import",
     "-Ywarn-numeric-widen",
     "-Xfuture",
     "-language:higherKinds")
@@ -35,11 +36,14 @@ scalacOptions ++= {
   CrossVersion.partialVersion(scalaVersion.value) match {
     case Some((2, 12)) => options.map {
       case "-Xlint"               => "-Xlint:-unused,_"
-      case "-Ywarn-unused-import" => "-Ywarn-unused:imports,-patvars,-privates,-locals,-params,-implicits"
+      case "-Ywarn-unused-import" => "-Ywarn-unused:imports,-patvars,-privates,-locals,-implicits"
       case other                  => other
     }
     case Some((2, n)) if n >= 13  => options.filterNot { opt =>
       opt == "-Yno-adapted-args" || opt == "-Xfuture" || opt == "-Xfatal-warnings" || opt == "-deprecation"
+    }.map {
+      case "-Ywarn-unused-import" => "-Ywarn-unused:imports,-patvars,-privates,-locals,-implicits"
+      case other                  => other
     } :+ "-Xsource:2.13"
     case _             => options
   }
@@ -49,6 +53,12 @@ scalacOptions in (Compile, doc) ++= Seq(
   "-groups",
   "-implicits",
   "-no-link-warnings")
+
+
+fork in Test := true
+
+javaOptions in Test ++= Seq(
+  "-Djava.locale.providers=COMPAT, CLDR")
 
 licenses := Seq(("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")))
 
