@@ -8,6 +8,7 @@ import org.scalactic.source.Position
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers._
 
+
 class JavaTimeDateExtSpec extends AnyFunSuite {
   import JavaTimeDateExtSpec._
 
@@ -82,8 +83,8 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
       implicit def f: DateTimeFormatter = fmt
       val v = config.get[ZonedDateTime](k)
       v should (
-        be(ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneId.of("America/Los_Angeles"))) or
-        be(ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneId.of("-08:00")))
+        be(ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, zoneId)) or
+        be(ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneId.of("+00:00")))
       )
     }
 
@@ -92,10 +93,10 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     checkFmt("good-zoned-date-time-fmt3", DateTimeFormatter.ofPattern("MMM d, yyyy h:m a zzzz"))
 
     // struct
-    config.get[ZonedDateTime]("good-zoned-date-time-fmt4") shouldBe ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneId.of("America/Los_Angeles"))
+    config.get[ZonedDateTime]("good-zoned-date-time-fmt4") shouldBe ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, zoneId)
 
     // number
-    config.get[ZonedDateTime]("good-zoned-date-time-fmt5") shouldBe ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneId.of("America/Los_Angeles"))
+    config.get[ZonedDateTime]("good-zoned-date-time-fmt5").toEpochSecond shouldBe zonedMillis
 
     // now
     implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
@@ -106,7 +107,9 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     def checkFmt(k: String, fmt: DateTimeFormatter)(implicit pos: Position): Unit = {
       implicit def f: DateTimeFormatter = fmt
       val v = config.get[OffsetDateTime](k)
-      v shouldBe OffsetDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneOffset.of("-08:00"))
+      withClue(k) {
+        v shouldBe OffsetDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneOffset.of("-08:00"))
+      }
     }
 
     checkFmt("good-offset-date-time-fmt1", DateTimeFormatter.ISO_OFFSET_DATE_TIME)
@@ -114,14 +117,20 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     checkFmt("good-offset-date-time-fmt3", DateTimeFormatter.ofPattern("MMM d, yyyy h:m a xxx"))
 
     // struct
-    config.get[OffsetDateTime]("good-offset-date-time-fmt4") shouldBe OffsetDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneOffset.of("-08:00"))
+    withClue("struct") {
+      config.get[OffsetDateTime]("good-offset-date-time-fmt4") shouldBe OffsetDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneOffset.of("-08:00"))
+    }
 
     // number
-    config.get[OffsetDateTime]("good-offset-date-time-fmt5") shouldBe OffsetDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneOffset.of("-08:00"))
+    withClue("number") {
+      config.get[OffsetDateTime]("good-offset-date-time-fmt5") shouldBe OffsetDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneOffset.of("-08:00"))
+    }
 
     // now
-    implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
-    config.get[OffsetDateTime]("good-offset-date-time-fmt6") shouldBe OffsetDateTime.now(clock)
+    withClue("now") {
+      implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
+      config.get[OffsetDateTime]("good-offset-date-time-fmt6") shouldBe OffsetDateTime.now(clock)
+    }
   }
 
   test("Parse java.time.DayOfWeek") {
@@ -175,10 +184,12 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
 
 object JavaTimeDateExtSpec {
 
-  val zoneId = ZoneId.of("America/Los_Angeles")
+  val zoneId: ZoneId = ZoneId.of("UTC")
+
+  val zonedMillis = ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, zoneId).toEpochSecond
 
   val config: Config = ConfigFactory parseString
-    """good-local-time-fmt1 = "15:01"
+   s"""good-local-time-fmt1 = "15:01"
       |good-local-time-fmt2 = "15:01 PM"
       |good-local-time-fmt3 = "15:1"
       |good-local-time-fmt4.h = 15
@@ -206,16 +217,16 @@ object JavaTimeDateExtSpec {
       |good-local-date-time-fmt5 = 1322874900 // epoch seconds
       |good-local-date-time-fmt6 = now
       |
-      |good-zoned-date-time-fmt1 = "2011-12-03T01:15-08:00[America/Los_Angeles]"
-      |good-zoned-date-time-fmt2 = "12/3/2011 1:15 AM -08:00"
-      |good-zoned-date-time-fmt3 = "Dec 3, 2011 1:15 AM America/Los_Angeles"
+      |good-zoned-date-time-fmt1 = "2011-12-03T01:15+00:00[UTC]"
+      |good-zoned-date-time-fmt2 = "12/3/2011 1:15 AM +00:00"
+      |good-zoned-date-time-fmt3 = "Dec 3, 2011 1:15 AM UTC"
       |good-zoned-date-time-fmt4.y = 2011
       |good-zoned-date-time-fmt4.m = 12
       |good-zoned-date-time-fmt4.d = 3
       |good-zoned-date-time-fmt4.h = 1
       |good-zoned-date-time-fmt4.min = 15
-      |good-zoned-date-time-fmt4.id = "America/Los_Angeles"
-      |good-zoned-date-time-fmt5 = 1322903700 // epoch seconds
+      |good-zoned-date-time-fmt4.id = UTC
+      |good-zoned-date-time-fmt5 = $zonedMillis // epoch seconds
       |good-zoned-date-time-fmt6 = now
       |
       |good-offset-date-time-fmt1 = "2011-12-03T01:15-08:00"
