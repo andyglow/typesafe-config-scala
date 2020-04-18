@@ -28,9 +28,8 @@ val v3 = config.get[FiniteDuration]("path")
 #### Get rid of `if hasPath this else that` by leveraging notion of options
 ```scala
 // optional value
-val opt1: Option[String] = config.opt[String]("path")
-val opt2: Option[String] = config.get[Option[String]]("path")
-val val3: String         = config.getOrElse[String]("path", "default")
+val val1: Option[String] = config.get[Option[String]]("path")
+val val2: String         = config.getOrElse[String]("path", "default")
 ```
 
 #### Have more flexible api for working with multi-values
@@ -47,23 +46,31 @@ val iterator3 = config.get[Iterator[ConfigMemorySize]]("path")
 - `Double`
 - `Long`
 - `Bytes` (file size, etc...)
-- `Duration` (java)
+- `Duration` (java.time)
 - `Duration` (scala)
 - `FiniteDuration`
 - `ConfigList`
 - `Config`
 - `ConfigObject`
 - `ConfigMemorySize`
-- `java.util.Date` (to demonstrate how it might be extended)
+- `Date` (java.util)
+- `Date` (java.sql)
+- `Time` (java.sql)
+- `Timestamp` (java.sql)
+- `LocalDate` (java.time)
+- `LocalTime` (java.time)
+- `LocalDateTime` (java.time)
+- `OffsetDateTime` (java.time)
+- `ZonedDateTime` (java.time)
+- `DayOfWeek` (java.time)
+- `Month` (java.time)
+- `Year` (java.time)
 - `Option[T]` where `T` is one of the supported types
-- scala collections. `Seq[T]`, etc. Any sort of collection types which has corresponsing `CanBuildFrom`
+- scala collections. `Seq[T]`, etc. 
+  Any sort of collection types which has corresponding `CanBuildFrom`
 
 ### Extending
 Also this can be extended by providing implementations for `FromConf` and/or `ConfType` 
 (used for collections and might be implicitly reused for `FromConf`)
 For example take a look at `com.github.andyglow.config.ConfType#juDateT` implementation 
 and spec at `com.github.andyglow.config.JavaUtilDateExtSpec`
-
-### TODO
-- Experiment with macro-based config reader which could read out the config into a case class
-- ADT for Enums (also macro)
