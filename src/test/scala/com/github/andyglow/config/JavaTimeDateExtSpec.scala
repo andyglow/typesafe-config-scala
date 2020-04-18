@@ -96,7 +96,7 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     config.get[ZonedDateTime]("good-zoned-date-time-fmt4") shouldBe ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, zoneId)
 
     // number
-    config.get[ZonedDateTime]("good-zoned-date-time-fmt5").toEpochSecond shouldBe zonedMillis
+    config.get[ZonedDateTime]("good-zoned-date-time-fmt5").toEpochSecond shouldBe zonedSeconds
 
     // now
     implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
@@ -123,7 +123,7 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
 
     // number
     withClue("number") {
-      config.get[OffsetDateTime]("good-offset-date-time-fmt5") shouldBe OffsetDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneOffset.of("-08:00"))
+      config.get[OffsetDateTime]("good-offset-date-time-fmt5").toEpochSecond shouldBe offsetSeconds
     }
 
     // now
@@ -186,7 +186,9 @@ object JavaTimeDateExtSpec {
 
   val zoneId: ZoneId = ZoneId.of("UTC")
 
-  val zonedMillis = ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, zoneId).toEpochSecond
+  val zonedSeconds = ZonedDateTime.of(2011, 12, 3, 1, 15, 0, 0, zoneId).toEpochSecond
+
+  val offsetSeconds = OffsetDateTime.of(2011, 12, 3, 1, 15, 0, 0, ZoneOffset.of("-08:00")).toEpochSecond
 
   val config: Config = ConfigFactory parseString
    s"""good-local-time-fmt1 = "15:01"
@@ -226,7 +228,7 @@ object JavaTimeDateExtSpec {
       |good-zoned-date-time-fmt4.h = 1
       |good-zoned-date-time-fmt4.min = 15
       |good-zoned-date-time-fmt4.id = UTC
-      |good-zoned-date-time-fmt5 = $zonedMillis // epoch seconds
+      |good-zoned-date-time-fmt5 = $zonedSeconds // epoch seconds
       |good-zoned-date-time-fmt6 = now
       |
       |good-offset-date-time-fmt1 = "2011-12-03T01:15-08:00"
@@ -238,7 +240,7 @@ object JavaTimeDateExtSpec {
       |good-offset-date-time-fmt4.h = 1
       |good-offset-date-time-fmt4.min = 15
       |good-offset-date-time-fmt4.offset = "-08:00"
-      |good-offset-date-time-fmt5 = 1322903700 // epoch seconds
+      |good-offset-date-time-fmt5 = $offsetSeconds // epoch seconds
       |good-offset-date-time-fmt6 = now
       |
       |good-mon-fmt1 = Monday
