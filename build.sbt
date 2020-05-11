@@ -88,7 +88,7 @@ releaseCrossBuild := true
 
 libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.4.0",
-  "org.scalatest" %% "scalatest" % "3.1.1" % Test)
+  "org.scalatest" %% "scalatest" % "3.1.2" % Test)
 
 releaseCrossBuild := true
 
