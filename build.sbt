@@ -13,9 +13,9 @@ organizationName := "andyglow"
 
 publishTo := sonatypePublishTo.value
 
-scalaVersion := "2.13.1"
+scalaVersion := "2.12.11"
 
-crossScalaVersions := Seq("2.13.1", "2.12.10", "2.11.12")
+crossScalaVersions := Seq("2.13.2", "2.12.11", "2.11.12")
 
 scalacOptions ++= {
   val options = Seq(
@@ -53,7 +53,6 @@ scalacOptions in (Compile, doc) ++= Seq(
   "-groups",
   "-implicits",
   "-no-link-warnings")
-
 
 fork in Test := true
 
