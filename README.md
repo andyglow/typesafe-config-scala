@@ -74,3 +74,24 @@ Also this can be extended by providing implementations for `FromConf` and/or `Co
 (used for collections and might be implicitly reused for `FromConf`)
 For example take a look at `com.github.andyglow.config.ConfType#juDateT` implementation 
 and spec at `com.github.andyglow.config.JavaUtilDateExtSpec`
+
+### Flatten
+Often we need to transform configs into some more trivial structures like Maps or java Properties.
+For these sort or problems we provide `Flatten` function.
+It map take `Config` or `ConfigValue` and produce either Properties or Map.
+Example:
+```scala
+val conf: Config = ???
+
+// for config
+val properties = Flatten[java.util.Properties](conf)
+val stringMap = Flatten[Map[String, String]](conf)
+
+// for value
+val properties = Flatten[java.util.Properties](conf.getValue("some-prop"))
+val stringMap = Flatten[Map[String, String]](conf.getValue("some-prop"))
+
+// also you can flatten config into already initialized instance of either Properties of Map
+val propertiesWithConfig = Flatten(conf.getValue("some-prop"), properties)
+val stringMapWithConfig = Flatten(conf.getValue("some-prop"), stringMap)
+```
