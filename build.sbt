@@ -13,9 +13,9 @@ organizationName := "andyglow"
 
 publishTo := sonatypePublishTo.value
 
-scalaVersion := "2.12.11"
+scalaVersion := "2.12.12"
 
-crossScalaVersions := Seq("2.13.2", "2.12.11", "2.11.12")
+crossScalaVersions := Seq("2.13.4", "2.12.12", "2.11.12")
 
 scalacOptions ++= {
   val options = Seq(
