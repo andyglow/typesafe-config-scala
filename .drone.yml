@@ -161,8 +161,8 @@
             "CODECOV_TOKEN": {
                "from_secret": "codecov_token"
             },
-            "DRONE_WORKSPACE_PATH": "/drone/src/2.12",
-            "SCALA_VER": "2.12"
+            "DRONE_WORKSPACE_PATH": "/drone/src/2.13",
+            "SCALA_VER": "2.13"
          },
          "image": "andyglow/sbt:latest",
          "name": "scoverage",
@@ -173,7 +173,7 @@
    ],
    "type": "docker",
    "workspace": {
-      "path": "2.12"
+      "path": "2.13"
    }
 }
 ...

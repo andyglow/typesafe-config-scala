@@ -74,9 +74,9 @@ local Notify(name, ver) = {
   Pipeline("2.13", SbtCleanTest("2.13"), Notify("slack", "2.13")),
   Pipeline("2.12", SbtCleanTest("2.12"), Notify("slack", "2.12")),
   Pipeline("2.11", SbtCleanTest("2.11"), Notify("slack", "2.11")),
-  AbstractPipeline("finalize") + Workspace("2.12") + {
+  AbstractPipeline("finalize") + Workspace("2.13") + {
     steps: [
-      Coverage("scoverage", "2.12")
+      Coverage("scoverage", "2.13")
     ],
     depends_on: [
       Dir + "2.13",
