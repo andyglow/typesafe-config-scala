@@ -1,5 +1,7 @@
 import xerial.sbt.Sonatype._
 import ReleaseTransformations._
+import ScalaVer._
+
 
 name := "typesafe-config-scala"
 
@@ -13,41 +15,13 @@ organizationName := "andyglow"
 
 publishTo := sonatypePublishTo.value
 
-scalaVersion := "2.12.12"
+scalaVersion := (ScalaVer.fromEnv getOrElse ScalaVer.default).full
 
-crossScalaVersions := Seq("2.13.4", "2.12.12", "2.11.12")
+crossScalaVersions := ScalaVer.values.map(_.full)
 
-scalacOptions ++= {
-  val options = Seq(
-    "-encoding", "UTF-8",
-    "-feature",
-    "-unchecked",
-    "-deprecation",
-    "-Xfatal-warnings",
-    "-Xlint",
-    "-Yno-adapted-args",
-    "-Ywarn-dead-code",
-    "-Ywarn-unused-import",
-    "-Ywarn-numeric-widen",
-    "-Xfuture",
-    "-language:higherKinds")
+scalaV := ScalaVer.fromString(scalaVersion.value) getOrElse ScalaVer.default
 
-  // WORKAROUND https://github.com/scala/scala/pull/5402
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 12)) => options.map {
-      case "-Xlint"               => "-Xlint:-unused,_"
-      case "-Ywarn-unused-import" => "-Ywarn-unused:imports,-patvars,-privates,-locals,-implicits"
-      case other                  => other
-    }
-    case Some((2, n)) if n >= 13  => options.filterNot { opt =>
-      opt == "-Yno-adapted-args" || opt == "-Xfuture" || opt == "-Xfatal-warnings" || opt == "-deprecation"
-    }.map {
-      case "-Ywarn-unused-import" => "-Ywarn-unused:imports,-patvars,-privates,-locals,-implicits"
-      case other                  => other
-    } :+ "-Xsource:2.13"
-    case _             => options
-  }
-}
+scalacOptions := CompilerOptions(scalaV.value)
 
 scalacOptions in (Compile, doc) ++= Seq(
   "-groups",
