@@ -4,7 +4,7 @@ sealed abstract class ScalaVer(val full: String)
 
 object ScalaVer {
 
-  final case object _211 extends ScalaVer("2.11.12")
+  final case object _211 extends ScalaVer("2.13.5")
 
   final case object _212 extends ScalaVer("2.12.12")
 
