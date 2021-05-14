@@ -10,9 +10,11 @@ object ScalaVer {
 
   final case object _213 extends ScalaVer("2.13.4")
 
-  val values: Seq[ScalaVer] = Set(_211, _212, _213).toSeq
+  final case object _300 extends ScalaVer("3.0.0")
 
-  val default: ScalaVer = _212
+  val values: Seq[ScalaVer] = Set(_211, _212, _213, _300).toSeq
+
+  val default: ScalaVer = _300
 
   def fromEnv: Option[ScalaVer] = sys.env.get("SCALA_VER") flatMap fromString
 
@@ -20,6 +22,7 @@ object ScalaVer {
     case x if x startsWith "2.11" => Some(_211)
     case x if x startsWith "2.12" => Some(_212)
     case x if x startsWith "2.13" => Some(_213)
+    case x if x startsWith "3.0"  => Some(_300)
     case _                        => None
   }
 

@@ -13,7 +13,7 @@ object Flatten {
 
   final case class Settings(numberFmt: NumberFormat)
 
-  final object Settings {
+  object Settings {
     implicit val defaultSettings: Settings = {
       val fmt = NumberFormat.getInstance()
       fmt.setGroupingUsed(false)
@@ -62,5 +62,4 @@ object Flatten {
       case ConfObj(v)  => v.scala.foldLeft(props) { case (props, (f, v)) =>  move(v, false, path :+ f, props) }
     }
   }
-
 }

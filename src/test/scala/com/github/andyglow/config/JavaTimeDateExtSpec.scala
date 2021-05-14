@@ -30,8 +30,10 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     config.get[LocalTime]("good-local-time-fmt5") shouldBe LocalTime.of(15, 1)
 
     // now
-    implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
-    config.get[LocalTime]("good-local-time-fmt6") shouldBe LocalTime.now(clock)
+    {
+      implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
+      config.get[LocalTime]("good-local-time-fmt6") shouldBe LocalTime.now(clock)
+    }
   }
 
   test("Parse java.time.LocalDate") {
@@ -52,8 +54,10 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     config.get[LocalDate]("good-local-date-fmt5") shouldBe LocalDate.of(2011, 12, 3)
 
     // now
-    implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
-    config.get[LocalDate]("good-local-date-fmt6") shouldBe LocalDate.now(clock)
+    {
+      implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
+      config.get[LocalDate]("good-local-date-fmt6") shouldBe LocalDate.now(clock)
+    }
   }
 
   test("Parse java.time.LocalDateTime") {
@@ -74,8 +78,10 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     config.get[LocalDateTime]("good-local-date-time-fmt5") shouldBe LocalDateTime.of(2011, 12, 3, 1, 15)
 
     // now
-    implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
-    config.get[LocalDateTime]("good-local-date-time-fmt6") shouldBe LocalDateTime.now(clock)
+    {
+      implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
+      config.get[LocalDateTime]("good-local-date-time-fmt6") shouldBe LocalDateTime.now(clock)
+    }
   }
 
   test("Parse java.time.ZonedDateTime") {
@@ -99,8 +105,10 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     config.get[ZonedDateTime]("good-zoned-date-time-fmt5").toEpochSecond shouldBe zonedSeconds
 
     // now
-    implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
-    config.get[ZonedDateTime]("good-zoned-date-time-fmt6") shouldBe ZonedDateTime.now(clock)
+    {
+      implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
+      config.get[ZonedDateTime]("good-zoned-date-time-fmt6") shouldBe ZonedDateTime.now(clock)
+    }
   }
 
   test("Parse java.time.OffsetDateTime") {
@@ -147,8 +155,10 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     check("sun", DayOfWeek.SUNDAY)
 
     // now
-    implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
-    config.get[DayOfWeek]("good-dow-fmt4") shouldBe DayOfWeek.from(LocalDateTime.now(clock))
+    {
+      implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
+      config.get[DayOfWeek]("good-dow-fmt4") shouldBe DayOfWeek.from(LocalDateTime.now(clock))
+    }
   }
 
   test("Parse java.time.Month") {
@@ -170,8 +180,10 @@ class JavaTimeDateExtSpec extends AnyFunSuite {
     check("dec", Month.DECEMBER)
 
     // now
-    implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
-    config.get[Month]("good-month-fmt4") shouldBe Month.from(LocalDateTime.now(clock))
+    {
+      implicit val clock = Clock.fixed(Instant.ofEpochSecond(1000), zoneId)
+      config.get[Month]("good-month-fmt4") shouldBe Month.from(LocalDateTime.now(clock))
+    }
   }
 
 //  test("Throw an exception on illegal date record") {
