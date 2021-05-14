@@ -23,14 +23,14 @@ scalaV := ScalaVer.fromString(scalaVersion.value) getOrElse ScalaVer.default
 
 scalacOptions := CompilerOptions(scalaV.value)
 
-scalacOptions in (Compile, doc) ++= Seq(
+Compile / doc / scalacOptions ++= Seq(
   "-groups",
   "-implicits",
   "-no-link-warnings")
 
-fork in Test := true
+Test / fork := true
 
-javaOptions in Test ++= Seq(
+Test / javaOptions ++= Seq(
   "-Djava.locale.providers=COMPAT, CLDR")
 
 licenses := Seq(("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")))
