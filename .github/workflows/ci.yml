@@ -30,3 +30,7 @@ jobs:
       with:
         verbose: true
         fail_ci_if_error: true
+        name: codecov-umbrella
+        path_to_write_report: ./coverage/codecov_report.txt
+        directory: ./target/scala-3.2.1/scoverage-report
+        files: ./scoverage.xml
