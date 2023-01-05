@@ -5,15 +5,19 @@ import com.typesafe.config._
 import com.typesafe.config.impl.Internals
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
+import scala.reflect.ClassTag
 
 
 trait ConfType[T] { self =>
   type Internal
+  def name: String
   def make(x: ConfigValue, path: String): T
   def map[TT](f: T => TT): ConfType.Aux[TT, Internal] = new ConfType[TT] {
     type Internal = self.Internal
     def make(x: ConfigValue, path: String): TT = f(self.make(x, path))
+    def name: String = self.name
   }
+  override final def toString: String = name
 }
 
 trait LowPriorityConfType
@@ -26,9 +30,9 @@ object ConfType extends JavaTimeConfTypes with LowPriorityConfType {
 
   private[config] case class ImplicitPath(v: String) extends AnyVal
 
-  private[config] def homogenous[T, I](original: ConfigValueType, f: I => T): ConfType.Aux[T, I] = new ConfType[T] {
+  private[config] def homogenous[T, I](original: ConfigValueType, f: I => T)(implicit ct: ClassTag[T]): ConfType.Aux[T, I] = new ConfType[T] {
     type Internal = I
-
+    def name: String = ct.runtimeClass.getName
     def make(x: ConfigValue, path: String): T = {
       val v = Internals.normalize(x, original)
       if (v.valueType() != original)
@@ -42,9 +46,9 @@ object ConfType extends JavaTimeConfTypes with LowPriorityConfType {
     }
   }
 
-  private[config] def flexible[T](pf: String => PartialFunction[ConfigValue, T]): ConfType[T] = new ConfType[T] {
+  private[config] def flexible[T](pf: String => PartialFunction[ConfigValue, T])(implicit ct: ClassTag[T]): ConfType[T] = new ConfType[T] {
     type Internal = Nothing
-
+    def name: String = ct.runtimeClass.getName
     def make(x: ConfigValue, path: String): T = {
       val f = pf(path)
       if (f isDefinedAt x) f(x) else
@@ -52,9 +56,9 @@ object ConfType extends JavaTimeConfTypes with LowPriorityConfType {
     }
   }
 
-  private[config] def flexible2[T](pf: ImplicitPath => PartialFunction[ConfigValue, T]): ConfType[T] = new ConfType[T] {
+  private[config] def flexible2[T](pf: ImplicitPath => PartialFunction[ConfigValue, T])(implicit ct: ClassTag[T]): ConfType[T] = new ConfType[T] {
     type Internal = Nothing
-
+    def name: String = ct.runtimeClass.getName
     def make(x: ConfigValue, path: String): T = {
       val f = pf(ImplicitPath(path))
       if (f isDefinedAt x) f(x) else
