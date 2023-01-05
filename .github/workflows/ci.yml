@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [ "master" ]
+    paths-ignore: [ "**.md" ]
+  pull_request:
+    branches: [ "master" ]
+    paths-ignore: [ "**.md" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v3
+    - uses: olafurpg/setup-scala@v13
+      with:
+        java-version: 'amazon-corretto@1.17.0'
+    - name: test
+      run: sbt coverage +test
+    - name: codecov upload
+      run: sbt coverageReport
+    - name: "Upload coverage to Codecov"
+      uses: "codecov/codecov-action@v3"
+      with:
+        fail_ci_if_error: true
