@@ -22,15 +22,13 @@ jobs:
       with:
         java-version: 'amazon-corretto@1.17.0'
     - name: test
-      run: sbt +test
-    - name: codecov test
-      run: sbt coverage test coverageReport
+      run: |
+        sbt +test
+        sbt coverage test coverageReport
     - name: codecov upload
       uses: codecov/codecov-action@v3
       with:
         verbose: true
         fail_ci_if_error: true
         name: codecov-umbrella
-        path_to_write_report: ./coverage/codecov_report.txt
-        directory: ./target/scala-3.2.1/scoverage-report
-        files: ./scoverage.xml
+        flags: unittests
