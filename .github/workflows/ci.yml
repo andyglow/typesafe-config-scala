@@ -22,7 +22,9 @@ jobs:
       with:
         java-version: 'amazon-corretto@1.17.0'
     - name: test
-      run: sbt coverage +test
+      run: sbt +test
+    - name: codecov report
+      run: sbt coverage test
     - name: codecov upload
       run: sbt coverageReport
     - name: "Upload coverage to Codecov"
