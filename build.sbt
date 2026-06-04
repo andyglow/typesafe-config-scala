@@ -60,7 +60,7 @@ developers := List(
 releaseCrossBuild := true
 
 libraryDependencies ++= Seq(
-  "com.typesafe" % "config" % "1.4.8",
+  "com.typesafe" % "config" % "1.4.9",
   "org.scalatest" %% "scalatest" % "3.2.20" % Test)
 
 releaseCrossBuild := true
